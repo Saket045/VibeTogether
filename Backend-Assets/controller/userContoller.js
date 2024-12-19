@@ -63,7 +63,20 @@ async function signin(req, res, next) {
     }
   }
 
-export { signup ,signin };
+
+async function logout(req, res) {
+  try {
+    res.clearCookie('token', cookieOptions);
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+    res.status(200).json({ message: "Logged out successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to log out", error: error.message });
+  }
+}
+
+export { signup ,signin ,logout };
 
 
 
