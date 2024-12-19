@@ -1,22 +1,26 @@
-import express from 'express'
-import cors from 'cors'
-import dotenv from 'dotenv'
-import authRoute from './routes/userRoute.js'
-import connectToMongoDB from './database/connetMongoDB.js'
-import cookieParser from 'cookie-parser'
-dotenv.config();
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import connectDB from "./database/connectDB.js"
+import userRoutes from "./routes/userRoutes.js"
+
+dotenv.config(); // Load environment variables
+
+connectDB(); // Connect to the database
+
+const app = express();
+app.use(express.urlencoded({ extended: false }));
+const PORT = process.env.PORT || 5000;
+
+app.use(express.json());
+
+app.get("/", (req, res) => {
+    res.send("Hello, this is a simple message from the server!");
+});
+
+app.use("/api",userRoutes);
 
 
-const app=express();
-app.use(cors());
-// const __dirname=path.resolve();
-const PORT=process.env.PORT || 5001;
-app.use(express.urlencoded({extended:true}));//to parse form data
-app.use(cookieParser());
-
-app.use("/api/auth",authRoute);
-
-app.listen(PORT,()=>{
-    console.log(`Server is running on port ${PORT}`);
-    connectToMongoDB();
-})
+app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+});
