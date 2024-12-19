@@ -16,7 +16,7 @@ const cookieOptions = {
 
 
 const signup = asyncHandler(async (req, res) => {
-    const { username, fullname, email, password, country, phonenumber, role } = req.body;
+    const { username, fullname, email, password, phonenumber } = req.body;
 
     let user = await User.findOne({ email });
     if (user) {
@@ -25,13 +25,11 @@ const signup = asyncHandler(async (req, res) => {
     }
 
     user = new User({
+        username,
         fullname,
         email,
         password,
-        country,
-        phonenumber,
-        role,
-        username,
+        phonenumber
     });
 
     // Save the user
@@ -46,9 +44,7 @@ const signup = asyncHandler(async (req, res) => {
 async function signin(req, res, next) {
     const { email, password } = req.body;
     try {
-      let user = await User.findOne({ email }).populate({
-        path: "userProfile"
-      });
+      let user = await User.findOne({ email })
       if (!user) {
         return next(errorHandler(404, "User not found"));
       }

@@ -18,7 +18,7 @@ app.get("/", (req, res) => {
     res.send("Hello, this is a simple message from the server!");
 });
 
-app.use("/api",userRoutes);
+app.use("/api/auth",userRoutes);
 
 
 app.listen(PORT, () => {

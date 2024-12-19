@@ -25,31 +25,14 @@ const userSchema = new mongoose.Schema({
         minlength: [6, "Password must be at least 6 characters,got {value}"],
         maxlength: [20, "Password must be at most 12 characters,got {value}"],
     },
-    country: {
-        type: String,
-        required: true,
-    },
     phonenumber: {
         type: String,
         required: true,
     },
-    role: {
-        type: String,
-        required: true,
-        enum: {
-            values: ["teacher", "student", "head"],
-            message: "Role must be either mentor, mentee, or organization",
-        },
-    },
     profilePicture: {
         type: String,
         default: "https://img.freepik.com/premium-vector/man-avatar-profile-picture-vector-illustration_268834-538.jpg",
-    },
-    userProfile: {
-        type: mongoose.Schema.Types.ObjectId,
-        refPath: "role",
-    },
-
+    }
 });
 
 userSchema.pre("save", async function (next) {
@@ -66,8 +49,8 @@ userSchema.pre("save", async function (next) {
 });
 
 userSchema.methods.generateAuthToken = function () {
-    const payload = { id: this._id, username: this.username, role: this.role };
-    const token = jwt.sign(payload, process.env.TOKEN_SECRET, { expiresIn: "1800s" });
+    const payload = { id: this._id, username: this.username};
+    const token = jwt.sign(payload, "abc123", { expiresIn: "1800s" });
     return token;
 };
 
